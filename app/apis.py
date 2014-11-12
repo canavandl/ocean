@@ -9,9 +9,9 @@ from sts.sts_interface import (SocketClient,
 api = Api(app)
 
 
-def send_and_recv(message, **args):
+def send_sts_query(message, **args):
     """
-    things and stuff
+    Helper function for get and set commands for STS
     """
     socketclient = SocketClient(DAEMON_CONSTANTS.get('hostname'),
                                 DAEMON_CONSTANTS.get('port'))
@@ -25,15 +25,22 @@ def send_and_recv(message, **args):
 
 
 class AcquireSpectrum(Resource):
+    """
+    API endpoint to read spectrum from sts
+    """
     def post(self):
-        values = send_and_recv(STS_INTERFACE.get('get_spectrum'))
+        values = send_sts_query(STS_INTERFACE.get('get_spectrum'))
         response = values[6:-1].split()
         return response
 
+
 class AcquireWavelengths(Resource):
+    """
+    API endpoint to read wavelengths from STS
+    """
     def post(self):
-        wavelenghts = send_and_recv(STS_INTERFACE('get_wavelengths'))
-        response = values[5:]
+        wavelengths = send_sts_query(STS_INTERFACE.get('get_wavelengths'))
+        response = wavelengths[6:-1].split()
         return response
 
 
