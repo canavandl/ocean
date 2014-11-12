@@ -16,10 +16,10 @@ def send_and_recv(message, **args):
     socketclient = SocketClient(DAEMON_CONSTANTS.get('hostname'),
                                 DAEMON_CONSTANTS.get('port'))
     socketclient.send_message(create_sts_command(message, args))
-    if args:
+    if not args:
         response = socketclient.receive_message()
     else:
-        response = None
+        response = "200"
     socketclient.close_connection()
     return response
 
@@ -27,18 +27,14 @@ def send_and_recv(message, **args):
 class AcquireSpectrum(Resource):
     def post(self):
         values = send_and_recv(STS_INTERFACE.get('get_spectrum'))
-        for c in values: print(c)
-        return "200"
+        response = values[6:-1].split()
+        return response
 
 class AcquireWavelengths(Resource):
     def post(self):
-        message = create_sts_command(STS_INTERFACE.get('get_wavelengths'))
-        socketclient = SocketClient(DAEMON_CONSTANTS.get(hostname),
-                                    DAEMON_CONSTANTS.get(port))
-        socketclient.send_message(message)
-        wavelengths = socketclient.receive_message()
-        socketclient.close_connection()
-        return wavelengths
+        wavelenghts = send_and_recv(STS_INTERFACE('get_wavelengths'))
+        response = values[5:]
+        return response
 
 
 api.add_resource(AcquireSpectrum, '/api/acquire_spectrum')
