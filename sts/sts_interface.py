@@ -23,6 +23,7 @@ http://oceanoptics.com/product/seabreeze/
 """
 
 import socket
+import select
 
 __author__ = 'Luke Canavan'
 __copyright__ = ''
@@ -134,6 +135,7 @@ class SocketClient(object):
         self.hostname = hostname
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.setblocking(0)
         if open_connection:
             self.open_connection()
 
@@ -195,10 +197,14 @@ class SocketClient(object):
         -------
         iterable
         """
-        data = self.recv(length)
+        try:
+            data = self.sock.recv(length)
+        except socket.timeout:
+            yield ''
+
         while data:
             yield data
-            data = self.recv(length)
+            data = self.sock.recv(length)
 
     def receive_message(self):
         """
