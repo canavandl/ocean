@@ -3,35 +3,35 @@ from flask.ext.restful import Resource, Api
 
 from sts.sts_interface import (SocketClient,
                                STS_INTERFACE,
+                               DAEMON_CONSTANTS,
                                create_sts_command)
 
 api = Api(app)
 
 
-class Settings(Resource):
+def send_and_recv(message, **args):
     """
-    Class about STS settings
-    blah blah blah
+    things and stuff
     """
-    def get(self):
-        raise NotImplementedError
-
-    def post(self):
-        raise NotImplementedError
+    socketclient = SocketClient(DAEMON_CONSTANTS.get('hostname'),
+                                DAEMON_CONSTANTS.get('port'))
+    socketclient.send_message(create_sts_command(message, args))
+    if args:
+        response = socketclient.receive_message()
+    else:
+        response = None
+    socketclient.close_connection()
+    return response
 
 
 class AcquireSpectrum(Resource):
-    def get(self):
-        message = create_sts_command(STS_INTERFACE.get('get_spectrum'))
-        socketclient = SocketClient(DAEMON_CONSTANTS.get(hostname),
-                                    DAEMON_CONSTANTS.get(port))
-        socketclient.send_message(message)
-        values = socketclient.receive_message()
-        socketclient.close_connection()
-        return values
+    def post(self):
+        values = send_and_recv(STS_INTERFACE.get('get_spectrum'))
+        for c in values: print(c)
+        return "200"
 
 class AcquireWavelengths(Resource):
-    def get(self):
+    def post(self):
         message = create_sts_command(STS_INTERFACE.get('get_wavelengths'))
         socketclient = SocketClient(DAEMON_CONSTANTS.get(hostname),
                                     DAEMON_CONSTANTS.get(port))
@@ -40,6 +40,6 @@ class AcquireWavelengths(Resource):
         socketclient.close_connection()
         return wavelengths
 
-api.add_resource(Settings, '/api/settings')
+
 api.add_resource(AcquireSpectrum, '/api/acquire_spectrum')
 api.add_resource(AcquireWavelengths, '/api/acquire_wavelengths')

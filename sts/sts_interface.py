@@ -23,7 +23,6 @@ http://oceanoptics.com/product/seabreeze/
 """
 
 import socket
-import select
 
 __author__ = 'Luke Canavan'
 __copyright__ = ''
@@ -33,11 +32,11 @@ __email__ = 'canavandl@gmail.com'
 __status__ = 'alpha'
 
 DAEMON_CONSTANTS = {
-  "ip_address": "127.0.0.1",
+  "hostname": "127.0.0.1",
   "port": 1865}
 
 DAEMON_COMMANDS = {
-  "get_version": "\x0D", #DAEMON VERSION
+  "get_version": "\x0D",
 }
 
 SPECTROMETER_STATUS = {
@@ -45,8 +44,8 @@ SPECTROMETER_STATUS = {
   "get_integration_time_maximum": "\x15",
   "get_intensity_maximum": "\x16",
   "get_wavelengths": "\x0A",
-  "get_serial_number": "\x0B", #SPECTROMETER SERIAL NO
-  "get_name": "\x0C", # SPECTROMETER NAME
+  "get_serial_number": "\x0B",
+  "get_name": "\x0C",
 }
 
 OCEAN_COMMANDS = {
@@ -184,7 +183,7 @@ class SocketClient(object):
         """
         self.sock.sendall(message)
 
-    def receive_stream(self, length=64):
+    def receive_stream(self, read_length=64):
         """
         Generator function to read buffer of unknown length at
         self.hostname: self.port
@@ -198,13 +197,13 @@ class SocketClient(object):
         iterable
         """
         try:
-            data = self.sock.recv(length)
+            data = self.sock.recv(read_length)
         except socket.timeout:
-            yield ''
+            raise StopIteration
 
         while data:
             yield data
-            data = self.sock.recv(length)
+            data = self.sock.recv(read_length)
 
     def receive_message(self):
         """
@@ -247,3 +246,4 @@ def create_sts_command(command, parameter=None):
         lo_bit = chr(len(parameter) & 0xFF)
         command += hi_bit + lo_bit + parameter
     return command
+
