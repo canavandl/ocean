@@ -131,11 +131,11 @@ class SocketClient(object):
     receive_message
     """
 
-    def __init__(self, hostname, port, open_connection=True):
+    def __init__(self, hostname, port, timeout=1, open_connection=True):
         self.hostname = hostname
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.setblocking(0)
+        self.sock.settimeout(timeout)
         if open_connection:
             self.open_connection()
 
