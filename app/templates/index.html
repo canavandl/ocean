@@ -5,20 +5,18 @@
         <title>STS Spectrum</title>
         <link rel="stylesheet" href="/static/css/ocean.css" />
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-        <script type="text/javascript" language="javascript" src=//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js></script>
+        <script type="text/javascript" language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
         <script type="text/javascript">
-            function updateWavelengthArray() {
+            function updateWavelengthsArray() {
                 $.ajax({
                     url: "/api/acquire_wavelengths",
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log(response)
+                        var wavelengths = response
                     }
                 });
             };
-
-            updateWavelengthArray();
 
             function updateSpectrumArray() {
                 $.ajax({
@@ -26,15 +24,25 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log(response)
+                        var spectrum = response
                     }
                 });
             };
 
+            function updatePlot() {
+                var datum = []
+                for (var i=0; i<wavelengths.length; i++) {
+                    datum.push([wavelengths[i], spectrum[i]]);
+                }
+                console.log('here');
+                $.plot(S("#placeholder"), [datum]);
+            };
+
             $(document).ready(function() {
-                $("get-data").on("click", function() {
+                $("#get-data").on("click", function() {
                     updateWavelengthArray()
                     updateSpectrumArray()
+                    updatePlot()
                 });
             });
 
