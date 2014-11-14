@@ -3,19 +3,18 @@
     <head>
         <meta charset="utf-8">
         <title>STS Spectrum</title>
-        <link rel="stylesheet" href="/static/css/ocean.css" />
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
         <style>
             #placeholder {
-                width: 450px;
-                height: 200px;
+                width: 600px;
+                height: 400px;
             }
         </style>
         <script type="text/javascript">
             specData = {wavelengths:[], spectrum:[]}
 
-            function updateWavelengthsArray(specData) {
+            function updateWavelengthsArray() {
                 $.ajax({
                     url: "/api/acquire_wavelengths",
                     type: "post",
@@ -25,7 +24,7 @@
                     }
                 });
             };
-            function updateSpectrumArray(specData) {
+            function updateSpectrumArray() {
                 $.ajax({
                     url: "/api/acquire_spectrum",
                     type: "post",
@@ -45,9 +44,10 @@
             };
 
             $(document).ready(function() {
+                updatePlot()
                 $("#get-data").on("click", function() {
-                    updateWavelengthsArray(specData)
-                    updateSpectrumArray(specData)
+                    updateWavelengthsArray()
+                    updateSpectrumArray()
                     updatePlot()
                 });
             });
