@@ -13,42 +13,41 @@
             }
         </style>
         <script type="text/javascript">
-            var wavelengths = [];
-            var spectrum = [];
+            specData = {wavelengths:[], spectrum:[]}
 
-            function updateWavelengthsArray() {
+            function updateWavelengthsArray(specData) {
                 $.ajax({
                     url: "/api/acquire_wavelengths",
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        wavelengths = response
+                        specData.wavelengths = response
                     }
                 });
             };
-            function updateSpectrumArray() {
+            function updateSpectrumArray(specData) {
                 $.ajax({
                     url: "/api/acquire_spectrum",
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        spectrum = response
+                        specData.spectrum = response
                     }
                 });
             };
             function updatePlot() {
                 var datum = []
-                for (var i=0; i<wavelengths.length; i++) {
-                    datum.push([wavelengths[i], spectrum[i]]);
+                for (var i=0; i<specData.wavelengths.length; i++) {
+                    datum.push([specData.wavelengths[i], specData.spectrum[i]]);
                 }
                 console.log(datum);
-                $.plot(S("#placeholder"), [datum]);
+                $.plot($("#placeholder"), [datum]);
             };
 
             $(document).ready(function() {
                 $("#get-data").on("click", function() {
-                    updateWavelengthsArray()
-                    updateSpectrumArray()
+                    updateWavelengthsArray(specData)
+                    updateSpectrumArray(specData)
                     updatePlot()
                 });
             });
