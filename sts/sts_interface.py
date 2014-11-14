@@ -31,6 +31,16 @@ __maintainer__ = ''
 __email__ = 'canavandl@gmail.com'
 __status__ = 'alpha'
 
+__all__ = ["DAEMON_CONSTANTS",
+           "DAEMON_COMMANDS",
+           "SPECTROMETER_STATUS",
+           "OCEAN_COMMANDS",
+           "OCEANHANDLER_COMMANDS",
+           "STS_INTERFACE",
+           "NO_PARAMETERS",
+           "SocketClient",
+           "create_sts_command"]
+
 DAEMON_CONSTANTS = {
   "hostname": "127.0.0.1",
   "port": 1865}

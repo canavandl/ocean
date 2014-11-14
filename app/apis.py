@@ -1,10 +1,11 @@
 from app import app
 from flask.ext.restful import Resource, Api
 
-from sts.sts_interface import (SocketClient,
-                               STS_INTERFACE,
-                               DAEMON_CONSTANTS,
-                               create_sts_command)
+from sts import (
+    SocketClient,
+    STS_INTERFACE,
+    DAEMON_CONSTANTS,
+    create_sts_command)
 
 api = Api(app)
 

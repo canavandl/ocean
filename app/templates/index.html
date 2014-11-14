@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>{{ title }} - microblog</title>
-</head>
-<body>
-      <h1>Max Integration Time: {{ settings.max_int }}</h1>
-      <h1>Min Integration Time: {{ settings.min_int }}</h1>
-</body>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>STS Spectrum</title>
+        <link rel="stylesheet" href="/static/css/ocean.css" />
+        <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" language="javascript" src=//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js></script>
+        <script type="text/javascript">
+            wavelengths = [];
+            spectrum = [];
+
+            $(document).ready(function() {
+
+            }
+
+            $.ajax({
+                        type: "POST",
+                        url: url,
+                        data: data,
+                        success: success,
+                        dataType: dataType
+                        });
+
+        </script>
+
+    </head>
+    <body>
+        <div id="placeholder"></div>
+    </body>
 </html>
+
