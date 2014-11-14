@@ -13,15 +13,37 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log(response);
-                    };
+                        console.log(response)
+                    }
                 });
             };
 
             updateWavelengthArray();
+
+            function updateSpectrumArray() {
+                $.ajax({
+                    url: "/api/acquire_spectrum",
+                    type: "post",
+                    datatype: "json",
+                    success: function(response) {
+                        console.log(response)
+                    }
+                });
+            };
+
+            $(document).ready(function() {
+                $("get-data").on("click", function() {
+                    updateWavelengthArray()
+                    updateSpectrumArray()
+                });
+            });
+
         </script>
     </head>
     <body>
+        <div id="take-spectrum">
+            <button id="get-data">Get Spectrum</button>
+        </div>
         <div id="placeholder"></div>
     </body>
 </html>
