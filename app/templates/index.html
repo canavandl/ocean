@@ -6,6 +6,12 @@
         <link rel="stylesheet" href="/static/css/ocean.css" />
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+        <style>
+            #placeholder {
+                width: 450px;
+                height: 200px;
+            }
+        </style>
         <script type="text/javascript">
             var wavelengths = [];
             var spectrum = [];
@@ -35,7 +41,7 @@
                 for (var i=0; i<wavelengths.length; i++) {
                     datum.push([wavelengths[i], spectrum[i]]);
                 }
-                console.log('here');
+                console.log(datum);
                 $.plot(S("#placeholder"), [datum]);
             };
 
