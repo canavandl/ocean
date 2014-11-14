@@ -20,36 +20,38 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
+                        console.log('updated wavelengths');
                         specData.wavelengths = response;
                     }
                 });
             };
-            function updateSpectrumArray() {
+            function updateSpectrumArray(callback) {
                 $.ajax({
                     url: "/api/acquire_spectrum",
                     type: "post",
                     datatype: "json",
                     success: function(response) {
+                        console.log('updated values')
                         specData.values = response
+                        callback()
                     }
                 });
             };
 
-            function updatePlot() {
-                updateWavelengthsArray();
-                updateSpectrumArray();
+            function renderPlot() {
                 var datum = [];
                 for (var i=0; i<specData.wavelengths.length; i++) {
                     datum.push([specData.wavelengths[i], specData.values[i]]);
                 }
-                console.log(datum);
+                console.log("rendering plot");
                 $.plot($("#placeholder"), [datum]);
             };
 
             $(document).ready(function() {
-                updatePlot()
+                renderPlot()
+                updateWavelengthsArray()
                 $("#get-data").on("click", function() {
-                    updatePlot()
+                    updateSpectrumArray(renderPlot);
                 });
             });
 
