@@ -20,7 +20,6 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log("got wavelengths");
                         specData.wavelengths = response;
                     }
                 });
@@ -31,14 +30,15 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log("got spectrum");
                         specData.values = response
                     }
                 });
             };
 
             function updatePlot() {
-                var datum = []
+                updateWavelengthsArray();
+                updateSpectrumArray();
+                var datum = [];
                 for (var i=0; i<specData.wavelengths.length; i++) {
                     datum.push([specData.wavelengths[i], specData.values[i]]);
                 }
@@ -49,8 +49,6 @@
             $(document).ready(function() {
                 updatePlot()
                 $("#get-data").on("click", function() {
-                    updateWavelengthsArray()
-                    updateSpectrumArray()
                     updatePlot()
                 });
             });
