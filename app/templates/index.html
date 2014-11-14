@@ -7,28 +7,29 @@
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
         <script type="text/javascript">
+            var wavelengths = [];
+            var spectrum = [];
+
             function updateWavelengthsArray() {
                 $.ajax({
                     url: "/api/acquire_wavelengths",
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        var wavelengths = response
+                        wavelengths = response
                     }
                 });
             };
-
             function updateSpectrumArray() {
                 $.ajax({
                     url: "/api/acquire_spectrum",
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        var spectrum = response
+                        spectrum = response
                     }
                 });
             };
-
             function updatePlot() {
                 var datum = []
                 for (var i=0; i<wavelengths.length; i++) {
@@ -40,7 +41,7 @@
 
             $(document).ready(function() {
                 $("#get-data").on("click", function() {
-                    updateWavelengthArray()
+                    updateWavelengthsArray()
                     updateSpectrumArray()
                     updatePlot()
                 });
