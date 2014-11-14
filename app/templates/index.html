@@ -12,7 +12,7 @@
             }
         </style>
         <script type="text/javascript">
-            specData = {wavelengths:[], spectrum:[]}
+            specData = {wavelengths:[], values:[]}
 
             function updateWavelengthsArray() {
                 $.ajax({
@@ -20,7 +20,8 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        specData.wavelengths = response
+                        console.log("got wavelengths");
+                        specData.wavelengths = response;
                     }
                 });
             };
@@ -30,14 +31,16 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        specData.spectrum = response
+                        console.log("got spectrum");
+                        specData.values = response
                     }
                 });
             };
+
             function updatePlot() {
                 var datum = []
                 for (var i=0; i<specData.wavelengths.length; i++) {
-                    datum.push([specData.wavelengths[i], specData.spectrum[i]]);
+                    datum.push([specData.wavelengths[i], specData.values[i]]);
                 }
                 console.log(datum);
                 $.plot($("#placeholder"), [datum]);
