@@ -7,23 +7,19 @@
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
         <script type="text/javascript" language="javascript" src=//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js></script>
         <script type="text/javascript">
-            wavelengths = [];
-            spectrum = [];
+            function updateWavelengthArray() {
+                $.ajax({
+                    url: "/api/acquire_wavelengths",
+                    type: "post",
+                    datatype: "json",
+                    success: function(response) {
+                        console.log(response);
+                    };
+                });
+            };
 
-            $(document).ready(function() {
-
-            }
-
-            $.ajax({
-                        type: "POST",
-                        url: url,
-                        data: data,
-                        success: success,
-                        dataType: dataType
-                        });
-
+            updateWavelengthArray();
         </script>
-
     </head>
     <body>
         <div id="placeholder"></div>
