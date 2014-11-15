@@ -20,7 +20,6 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log('updated wavelengths');
                         specData.wavelengths = response;
                     }
                 });
@@ -31,7 +30,6 @@
                     type: "post",
                     datatype: "json",
                     success: function(response) {
-                        console.log('updated values')
                         specData.values = response
                         callback()
                     }
@@ -43,13 +41,12 @@
                 for (var i=0; i<specData.wavelengths.length; i++) {
                     datum.push([specData.wavelengths[i], specData.values[i]]);
                 }
-                console.log("rendering plot");
                 $.plot($("#placeholder"), [datum]);
             };
 
             $(document).ready(function() {
-                renderPlot()
                 updateWavelengthsArray()
+                renderPlot()
                 $("#get-data").on("click", function() {
                     updateSpectrumArray(renderPlot);
                 });
