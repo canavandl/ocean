@@ -144,6 +144,18 @@
                 });
             };
 
+            function color_coords() {
+                $.ajax({
+                    url: "/api/colour_calculation",
+                    type: "post",
+                    data: specData,
+                    datatype: "json",
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            };
+
             function renderPlot() {
                 var datum = [];
                 for (var i=0; i<specData.wavelengths.length; i++) {
@@ -157,6 +169,7 @@
                 renderPlot()
                 $("#acquire-spectrum").on("click", function() {
                     updateSpectrumArray(renderPlot);
+                    color_coords()
                 });
             });
 
