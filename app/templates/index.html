@@ -3,14 +3,122 @@
     <head>
         <meta charset="utf-8">
         <title>STS Spectrum</title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
         <script type="text/javascript" language="javascript" src="//cdnjs.cloudflare.com/ajax/libs/flot/0.8.2/jquery.flot.min.js"></script>
+
+        <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+        <style media="all" type="text/css"></style>
         <style>
-            #placeholder {
-                width: 600px;
-                height: 400px;
+            body {
+            font-family: Arial, Helvetica, Sans-serif;
+            font-size: 16px;
+            font-weight:bold;
+            }
+            td {
+            padding:5px;
+            text-align: center;
+            height: 50px;
+            }
+            .pinlabel {
+            font-size: 14px;
+            }
+            .biglightindicator {
+            width:100%;
+            height:300px;
+            line-height: 300px;
+            text-align: center;
+            vertical-align: middle;
+            moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+            box-shadow:inset 0px 1px 0px 0px #ffffff;
+            -moz-box-shadow:1px 1px 2px black;
+            -webkit-box-shadow:1px 1px 2px black;
+            box-shadow:1px 1px 2px black;
+            -webkit-border-top-left-radius:15px;
+            -moz-border-radius-topleft:15px;
+            border-top-left-radius:15px;
+            -webkit-border-top-right-radius:15px;
+            -moz-border-radius-topright:15px;
+            border-top-right-radius:15px;
+            -webkit-border-bottom-right-radius:15px;
+            -moz-border-radius-bottomright:15px;
+            border-bottom-right-radius:15px;
+            -webkit-border-bottom-left-radius:15px;
+            -moz-border-radius-bottom-left:15px;
+            border-bottom-left-radius:15px;
+            font-family: Arial, Helvetica, Sans-serif;
+            font-size: 65px;
+            font-weight: bold;
+            text-indent:0;
+            border:1px solid #777777;
+            display:inline-block;
+            color:#FFF;
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #333333) );
+            background:-moz-linear-gradient( center top, #999999 5%, #333333 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#333333');
+            background-color:#ededed;
+            }
+            .lightindicator {
+            width:200px;
+            height:100px;
+            moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+            -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+            box-shadow:inset 0px 1px 0px 0px #ffffff;
+            -moz-box-shadow:1px 1px 2px black;
+            -webkit-box-shadow:1px 1px 2px black;
+            box-shadow:1px 1px 2px black;
+            -webkit-border-top-left-radius:3px;
+            -moz-border-radius-topleft:3px;
+            border-top-left-radius:3px;
+            -webkit-border-top-right-radius:3px;
+            -moz-border-radius-topright:3px;
+            border-top-right-radius:3px;
+            -webkit-border-bottom-right-radius:3px;
+            -moz-border-radius-bottomright:3px;
+            border-bottom-right-radius:3px;
+            -webkit-border-bottom-left-radius:3px;
+            -moz-border-radius-bottom-left:3px;
+            border-bottom-left-radius:3px;
+            font-family: Arial, Helvetica, Sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 100px;
+            text-indent:0;
+            text-align: center;
+            border:1px solid #777777;
+            display:inline-block;
+            color:#FFF;
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #999999), color-stop(1, #333333) );
+            background:-moz-linear-gradient( center top, #999999 5%, #333333 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#999999', endColorstr='#333333');
+            background-color:#ededed;
+            }
+            .canpress, #valuesrefreshbutton {
+            cursor: pointer;
+            }
+            .lightindicator.on, .lightindicator.input {
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #77ff77), color-stop(1, #00cc00) );
+            background:-moz-linear-gradient( center top, #77ff77 5%, #00cc00 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#77ff77', endColorstr='#00cc00');
+            background-color:#ededed;
+            }
+            .lightindicator.off .biglightindicator.off{
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dddddd), color-stop(1, #777777) );
+            background:-moz-linear-gradient( center top, #dddddd 5%, #777777 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#777777');
+            background-color:#ededed;
+            }
+            .lightindicator.red, .lightindicator.output, .biglightindicator.on{
+            background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05,#ff7777), color-stop(1, #cc0000) );
+            background:-moz-linear-gradient( center top, #ff7777 5%, #cc0000 100% );
+            filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff7777', endColorstr='#cc0000');
+            background-color:#ededed;
             }
         </style>
+
         <script type="text/javascript">
             specData = {wavelengths:[], values:[]}
 
@@ -41,13 +149,13 @@
                 for (var i=0; i<specData.wavelengths.length; i++) {
                     datum.push([specData.wavelengths[i], specData.values[i]]);
                 }
-                $.plot($("#placeholder"), [datum]);
+                $.plot($("#plot"), [datum]);
             };
 
             $(document).ready(function() {
                 updateWavelengthsArray()
                 renderPlot()
-                $("#get-data").on("click", function() {
+                $("#acquire-spectrum").on("click", function() {
                     updateSpectrumArray(renderPlot);
                 });
             });
@@ -55,10 +163,68 @@
         </script>
     </head>
     <body>
-        <div id="take-spectrum">
-            <button id="get-data">Get Spectrum</button>
-        </div>
-        <div id="placeholder"></div>
+        <div data-role="content" style="width:95%">
+            <div class="ui-grid-a" style="height:525px">
+            <div class="ui-block-a"style="width: 20%; height:500px; " >
+                <ul data-role="listview" data-inset="true" data-theme="a">
+                    <li data-role="list-divider">
+                        <h4>Controls</h4>
+                    </li>
+                    <li>
+                        <div class="lightindicator canpress takespectrum" id="acquire-spectrum">Take Spectrum</div>
+                    </li>
+                    <li>
+                        <div id="statustext">&nbsp;</div>
+                    </li>
+                </ul>
+            </div>
+            <div  class="ui-block-b" data-divider-theme="b" style="width: 60%; height:500px; padding:0px 10px">
+               <ul data-role="listview" data-inset="true" >
+                    <li data-role="list-divider">
+                        <h4>Data Plot</h4>
+                    </li>
+                    <li data-role="fieldcontain" >
+                        <div id="plot" class="plot" style="width:100%; height:350px"></div>
+                    </li>
+                </ul>
+            </div>
+            <div  class="ui-block-c" style="width: 20%; height:500px; ">
+               <ul data-role="listview" data-inset="true" datadividertheme="a">
+                    <li data-role="list-divider">
+                        <h4>Analysis</h4>
+                    </li>
+                   <li>CCT : </li>
+                   <li>DUV : </li>
+                   <div data-role="collapsible-set" data-inset="false" data-content-theme="a" id="outputset" style="margin:0px">
+                        <div data-role="collapsible" data-collapsed="true" data-count-theme="a" style="padding:0px; margin:0px" >
+                            <h3>CIE 1931</h3>
+                            <p>x : </p>
+                            <p>y : </p>
+                        </div>
+                   </div>
+                   <div data-role="collapsible-set" data-inset="false" data-content-theme="a" id="outputset2" style="margin:0px">
+                        <div data-role="collapsible" data-collapsed="true" data-count-theme="a" style="padding:0px; margin:0px" >
+                            <h3>CIE 1960</h3>
+                            <p>u : </p>
+                            <p>v : </p>
+                        </div>
+                   </div>
+                   <div data-role="collapsible-set" data-inset="false" data-content-theme="b" id="outputset3" style="margin:0px">
+                        <div data-role="collapsible" data-collapsed="true" data-count-theme="a" style="padding:0px; margin:0px" >
+                            <h3>CIE 1964</h3>
+                            <p>U : </p>
+                            <p>V : </p>
+                            <p>W : </p>
+                            <p>u' : </p>
+                            <p>v' : </p>
+                        </div>
+                   </div>
+                   <li>&nbsp</li>
+                </ul>
+            </div>
+            </div>
+        </div><!-- content -->
+        <div id="footer"></div>
     </body>
 </html>
 

@@ -1,5 +1,12 @@
 from app import app
+
 from flask.ext.restful import Resource, Api
+from flask import request
+
+from colour import (SpectralPowerDistribution,
+    spectral_to_XYZ,
+    CMFS,
+    LIGHT_SOURCES_RELATIVE_SPDS)
 
 from sts import (
     SocketClient,
@@ -45,5 +52,15 @@ class AcquireWavelengths(Resource):
         return response
 
 
+class ColourCalculation(Resource):
+    def post(self):
+        print('here')
+   #     data = dict(zip(request.form['wavelengths'], request.form['values']))
+        spd = LIGHT_SOURCES_RELATIVE_SPDS.get("Super HPS")
+        cmfs = CMFS.get('CIE 1931 2 Degree Standard Observer')
+        return list(spectral_to_XYZ(spd, cmfs))
+
+
 api.add_resource(AcquireSpectrum, '/api/acquire_spectrum')
 api.add_resource(AcquireWavelengths, '/api/acquire_wavelengths')
+api.add_resource(ColourCalculation, '/api/colour_calculation')
