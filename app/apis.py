@@ -59,7 +59,7 @@ class ColourCalculation(Resource):
         parser.add_argument('wavelengths[]', type=float, action='append')
         parser.add_argument('values[]', type=float, action='append')
         args = parser.parse_args()
-        data = dict(zip(args['wavelengths'], args['values']))
+        data = dict(zip(args['wavelengths[]'], args['values[]']))
         spd = SpectralPowerDistribution('spd', data)
         cmfs = CMFS.get('CIE 1931 2 Degree Standard Observer')
         return list(spectral_to_XYZ(spd, cmfs))
