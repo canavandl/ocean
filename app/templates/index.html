@@ -145,11 +145,15 @@
             };
 
             function color_coords() {
+                var assc = [];
+                for (var i=0; i<specData.wavelengths.length; i++) {
+                    assc.push([specData.wavelengths[i], specData.values[i]]);
+                }
                 $.ajax({
                     url: "/api/colour_calculation",
                     type: "post",
-                    data: specData,
-                    datatype: "json",
+                    data: assc,
+                    datatype: "application/json",
                     success: function(response) {
                         console.log(response);
                     }

@@ -1,5 +1,7 @@
 from app import app
 
+from flask import request
+
 from flask.ext.restful import (Resource,
                                Api,
                                reqparse)
@@ -55,14 +57,17 @@ class AcquireWavelengths(Resource):
 
 class ColourCalculation(Resource):
     def post(self):
+        data = request.get_json(force=True)
+        print("Data: ", data)
         parser = reqparse.RequestParser()
-        parser.add_argument('wavelengths[]', type=float, action='append')
-        parser.add_argument('values[]', type=float, action='append')
+        parser.add_argument('data[]', type=float, action='append')
+        parser.add_argument('data', type=float, action='append')
         args = parser.parse_args()
+
         data = dict(zip(args['wavelengths[]'], args['values[]']))
         spd = SpectralPowerDistribution('spd', data)
         cmfs = CMFS.get('CIE 1931 2 Degree Standard Observer')
-        return list(spectral_to_XYZ(spd, cmfs))
+        return spectral_to_XYZ(spd, cmfs).tolist()
 
 api.add_resource(AcquireSpectrum, '/api/acquire_spectrum')
 api.add_resource(AcquireWavelengths, '/api/acquire_wavelengths')
