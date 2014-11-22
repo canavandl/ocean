@@ -1,5 +1,6 @@
 from app import app
 
+import json
 from flask import request
 
 from flask.ext.restful import (Resource,
@@ -57,11 +58,11 @@ class AcquireWavelengths(Resource):
 
 class ColourCalculation(Resource):
     def post(self):
-        data = request.json
-        print("Data: ", data)
+        data = json.load(request.json)
+        print('data: ', data)
         parser = reqparse.RequestParser()
-        parser.add_argument('data[]', type=float, action='append')
-        parser.add_argument('data', type=float, action='append')
+        parser.add_argument('wavelengths', type=float, action='append')
+        parser.add_argument('values', type=float, action='append')
         args = parser.parse_args()
 
         data = dict(zip(args['wavelengths[]'], args['values[]']))
