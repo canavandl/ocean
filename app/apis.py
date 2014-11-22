@@ -1,6 +1,5 @@
 from app import app
 
-import json
 from flask import request
 
 from flask.ext.restful import (Resource,
@@ -42,7 +41,7 @@ class AcquireSpectrum(Resource):
     """
     def post(self):
         values = send_sts_query(STS_INTERFACE.get('get_spectrum'))
-        response = values[6:-1].split()
+        response = [float(i) for i in values[6:-1].split()]
         return response
 
 
@@ -52,24 +51,20 @@ class AcquireWavelengths(Resource):
     """
     def post(self):
         wavelengths = send_sts_query(STS_INTERFACE.get('get_wavelengths'))
-        response = wavelengths[6:-1].split()
+        response = [float(i) for i in wavelengths[6:-1].split()]
         return response
 
 
 class ColourCalculation(Resource):
     def post(self):
-        data = json.load(request.json)
-        print('data: ', data)
-        parser = reqparse.RequestParser()
-        parser.add_argument('wavelengths', type=float, action='append')
-        parser.add_argument('values', type=float, action='append')
-        args = parser.parse_args()
-
-        data = dict(zip(args['wavelengths[]'], args['values[]']))
+        data = request.json
+        data = dict(zip(data['wavelengths'], data['values']))
         spd = SpectralPowerDistribution('spd', data)
         cmfs = CMFS.get('CIE 1931 2 Degree Standard Observer')
         return spectral_to_XYZ(spd, cmfs).tolist()
 
+
 api.add_resource(AcquireSpectrum, '/api/acquire_spectrum')
 api.add_resource(AcquireWavelengths, '/api/acquire_wavelengths')
 api.add_resource(ColourCalculation, '/api/colour_calculation')
+
