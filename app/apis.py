@@ -57,7 +57,7 @@ class AcquireWavelengths(Resource):
 
 class ColourCalculation(Resource):
     def post(self):
-        data = request.get_json(force=True)
+        data = request.json
         print("Data: ", data)
         parser = reqparse.RequestParser()
         parser.add_argument('data[]', type=float, action='append')

@@ -150,10 +150,11 @@
                     assc.push([specData.wavelengths[i], specData.values[i]]);
                 }
                 $.ajax({
+                    type: "POST",
+                    contentType: "application/json",
+                    datatype: "json",
+                    data: JSON.stringify(specData),
                     url: "/api/colour_calculation",
-                    type: "post",
-                    data: assc,
-                    datatype: "application/json",
                     success: function(response) {
                         console.log(response);
                     }
