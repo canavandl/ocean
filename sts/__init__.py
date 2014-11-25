@@ -19,4 +19,5 @@ __all__ = ["DAEMON_CONSTANTS",
            "STS_INTERFACE",
            "NO_PARAMETERS",
            "SocketClient",
-           "create_sts_command"]
+           "create_sts_command",
+           "send_sts_command"]

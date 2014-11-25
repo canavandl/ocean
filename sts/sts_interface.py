@@ -39,7 +39,8 @@ __all__ = ["DAEMON_CONSTANTS",
            "STS_INTERFACE",
            "NO_PARAMETERS",
            "SocketClient",
-           "create_sts_command"]
+           "create_sts_command",
+           "send_sts_command"]
 
 DAEMON_CONSTANTS = {
   "hostname": "127.0.0.1",
@@ -129,6 +130,7 @@ class SocketClient(object):
     hostname
     port
     sock (socket object)
+    is_connected
 
     Methods
     -------
@@ -140,11 +142,14 @@ class SocketClient(object):
     receive_message
     """
 
-    def __init__(self, hostname, port, timeout=1, open_connection=True):
+    def __init__(self, hostname=DAEMON_CONSTANTS.get('hostname'),
+                 port=DAEMON_CONSTANTS.get('port'), timeout=1,
+                 open_connection=True):
         self.hostname = hostname
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.settimeout(timeout)
+        self.__is_connected = False
         if open_connection:
             self.open_connection()
 
@@ -159,6 +164,18 @@ class SocketClient(object):
         return 'SocketClient(hostname={0}, post={1})'.format(self.hostname,
                                                              self.port)
 
+    @property
+    def is_connected(self):
+        """
+        Property for **self.__is_connected** private attribute.
+
+        Returns
+        -------
+        boolean
+            self.__is_connected
+        """
+        return self.__is_connected
+
     def open_connection(self):
         """
         Connects to socket at self.hostname: self.port
@@ -168,6 +185,7 @@ class SocketClient(object):
         None
         """
         self.sock.connect((self.hostname, self.port))
+        self.__is_connected = True
 
     def close_connection(self):
         """
@@ -178,6 +196,7 @@ class SocketClient(object):
         None
         """
         self.sock.close()
+        self.__is_connected = False
 
     def send_message(self, message):
         """
@@ -257,3 +276,17 @@ def create_sts_command(command, parameter=None):
         command += hi_bit + lo_bit + parameter
     return command
 
+
+def send_sts_command(socketclient, message, **args):
+    """
+    Helper function for get and set commands for STS
+    """
+    if not socketclient.is_connected:
+        socketclient.open_connection()
+    socketclient.send_message(create_sts_command(message, args))
+    if not args:
+        response = socketclient.receive_message()
+    else:
+        response = "200"
+    socketclient.close_connection()
+    return response
